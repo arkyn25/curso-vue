@@ -1,0 +1,40 @@
+<meta charset="utf-8">
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script> -->
+
+<div id="app">
+{{ titulo }} {{subtitulo}} {{ 1 + 1 }}
+</did>
+
+<script>
+  function MeuVue(params) {
+    this.$el = document.querySelector(params.el);
+    this.$data = params.data;
+
+    for (let atr in this.$data) {
+      Object.defineProperty(this, atr, {
+        get: function() {
+          return this.$data[atr];
+        },
+        set: function(valor) {
+          this.$data[atr] = valor;
+          this.render();
+        }
+      });
+    }
+    const regex = /\{\{([\s\w+]*)\}\}/g;
+    this.$el.innerHTML = this.$el.innerHTML.replace(regex, (match, $1) => {
+      const value = this[$1.trim()];
+      return value? value: eval($1)
+    });
+  }
+
+  const vm = new MeuVue({
+    el: '#app',
+    data: {
+      titulo: 'Título',
+      subtitulo: 'Subtítulo'
+    }
+  })
+
+  console.log(vm.titulo);
+</script>
